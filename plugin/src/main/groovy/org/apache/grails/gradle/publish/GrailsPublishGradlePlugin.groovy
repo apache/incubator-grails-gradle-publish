@@ -577,7 +577,7 @@ Note: if project properties are used, the properties must be defined prior to ap
         }
 
         tasks.named('sourcesJar', Jar).configure { Jar jar ->
-            SourceSetContainer sourceSets = findSourceSets(project)
+            SourceSetContainer sourceSets = GrailsPublishGradlePlugin.findSourceSets(project)
             jar.reproducibleFileOrder = true
             jar.preserveFileTimestamps = false
             // to avoid platform specific defaults, set the permissions consistently
@@ -609,7 +609,7 @@ Note: if project properties are used, the properties must be defined prior to ap
             jar.dirPermissions { permissions ->
                 permissions.unix(0755)
             }
-            SourceSetContainer sourceSets = findSourceSets(project)
+            SourceSetContainer sourceSets = GrailsPublishGradlePlugin.findSourceSets(project)
             jar.from sourceSets.test.output
             jar.inputs.files(sourceSets.test.output)
             jar.archiveClassifier.set('tests')
