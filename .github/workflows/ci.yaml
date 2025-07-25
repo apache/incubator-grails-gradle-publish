@@ -1,0 +1,105 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: "CI"
+on:
+  push:
+    branches:
+      - '[4-9]+.[0-9]+.x'
+  pull_request:
+  workflow_dispatch:
+# queue jobs and only allow 1 run per branch due to the likelihood of hitting GitHub resource limits
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    name: 'Build'
+    strategy:
+      fail-fast: false
+      matrix:
+        java: [ 17, 21 ]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: "Output Agent IP" # in the event RAO blocks this agent, this can be used to debug it
+        run: curl -s https://api.ipify.org
+      - name: "📥 Checkout repository"
+        uses: actions/checkout@v4
+      - name: "☕️ Setup JDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: liberica
+          java-version: ${{ matrix.java }}
+      - name: "🐘 Setup Gradle"
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          develocity-access-key: ${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY  }}
+      - name: "🔨 Build project without tests"
+        if: ${{ contains(github.event.head_commit.message, '[skip tests]') }}
+        run: >
+          ./gradlew build
+          --continue --stacktrace -PskipTests
+      - name: "🔨 Build project with tests"
+        if: ${{ !contains(github.event.head_commit.message, '[skip tests]') }}
+        run: >
+          ./gradlew build
+          --continue --stacktrace
+          --rerun-tasks
+  publish:
+    if: github.repository_owner == 'apache' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    name: 'Publish'
+    needs: [ build ]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: "Output Agent IP" # in the event RAO blocks this agent, this can be used to debug it
+        run: curl -s https://api.ipify.org
+      - name: "📥 Checkout repository"
+        uses: actions/checkout@v4
+      - name: "☕️ Setup JDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: liberica
+          java-version: 17
+      - name: "🐘 Setup Gradle"
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          develocity-access-key: ${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY  }}
+      - name: "📤 Publish Gradle Snapshot Artifacts"
+        env:
+          GRAILS_PUBLISH_RELEASE: 'false'
+          MAVEN_PUBLISH_URL: 'https://repository.apache.org/content/repositories/snapshots'
+          MAVEN_PUBLISH_USERNAME: ${{ secrets.NEXUS_USER }}
+          MAVEN_PUBLISH_PASSWORD: ${{ secrets.NEXUS_PW  }}
+        run: >
+          ./gradlew publish aggregateChecksums aggregatePublishedArtifacts
+          -Dorg.gradle.internal.publish.checksums.insecure=true --no-build-cache --rerun-tasks
+      - name: "📤 Upload checksums"
+        uses: actions/upload-artifact@v4
+        with:
+          name: CHECKSUMS.txt
+          path: build/CHECKSUMS.txt
+      - name: "📤 Upload published artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: PUBLISHED_ARTIFACTS.txt
+          path: build/PUBLISHED_ARTIFACTS.txt
+      - name: "🔨 Generate Snapshot Documentation"
+        run: ./gradlew grails-publish:groovydoc -PgithubBranch=${{ needs.publish.outputs.target_branch }}
+      - name: "🚀 Publish to Github Pages"
+        uses: apache/grails-github-actions/deploy-github-pages@asf
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GRADLE_PUBLISH_RELEASE: 'false'
+          SOURCE_FOLDER: plugin/build/docs/api

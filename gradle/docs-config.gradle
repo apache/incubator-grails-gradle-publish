@@ -1,0 +1,75 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *    https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+configurations.register('documentation') {
+    canBeConsumed = false
+    canBeResolved = true
+    attributes {
+        attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+        attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling, Bundling.EXTERNAL))
+        attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+    }
+}
+dependencies {
+    add('documentation', "org.apache.groovy:groovy:${functionTestGroovyVersion}")
+    add('documentation', "org.apache.groovy:groovy-groovydoc:${functionTestGroovyVersion}")
+    add('documentation', "org.apache.groovy:groovy-ant:${functionTestGroovyVersion}")
+    add('documentation', "org.apache.groovy:groovy-docgenerator:${functionTestGroovyVersion}")
+    add('documentation', "org.apache.groovy:groovy-templates:${functionTestGroovyVersion}")
+}
+
+TaskProvider<Groovydoc> groovydocTask = tasks.named('groovydoc', Groovydoc)
+groovydocTask.configure { Groovydoc it ->
+    it.classpath = configurations.documentation
+    it.groovyClasspath = configurations.documentation
+    it.access = GroovydocAccess.PROTECTED
+    it.includeAuthor = false
+    it.includeMainForScripts = false
+    it.processScripts = false
+    it.noTimestamp = true
+    it.noVersionStamp = false
+    it.destinationDir = project.file('build/docs/api')
+}
+
+tasks.named('javadoc').configure {
+    it.enabled = false
+}
+
+tasks.named('javadocJar', Jar).configure { Jar jar ->
+    jar.reproducibleFileOrder = true
+    jar.preserveFileTimestamps = false
+    // to avoid platform specific defaults, set the permissions consistently
+    jar.filePermissions { permissions ->
+        permissions.unix(0644)
+    }
+    jar.dirPermissions { permissions ->
+        permissions.unix(0755)
+    }
+
+    jar.dependsOn(groovydocTask)
+
+    // Ensure the java source set is included in the groovydoc source set
+    SourceSetContainer sourceSets = project.extensions.getByType(SourceSetContainer)
+    groovydocTask.get().source(project.files(sourceSets.main.java.srcDirs))
+
+    ConfigurableFileCollection groovyDocFiles = project.files(groovydocTask.get().destinationDir)
+    jar.from(groovyDocFiles)
+    jar.inputs.files(groovyDocFiles)
+}
+

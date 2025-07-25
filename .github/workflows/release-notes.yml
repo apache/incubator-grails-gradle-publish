@@ -1,0 +1,66 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Changelog
+on:
+  issues:
+    types: [ closed,reopened ]
+  push:
+    branches:
+      - '[0-9]+.[0-9]+.x'
+  pull_request:
+    types: [ opened, reopened, synchronize ]
+  pull_request_target:
+    types: [ opened, reopened, synchronize ]
+  workflow_dispatch:
+jobs:
+  release_notes:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check if it has release drafter config file
+        id: check_release_drafter
+        run: |
+          has_release_drafter=$([ -f .github/release-drafter.yml ] && echo "true" || echo "false")
+          echo "has_release_drafter=${has_release_drafter}" >> $GITHUB_OUTPUT
+      - name: Extract branch name
+        id: extract_branch
+        run: echo "value=${GITHUB_REF:11}" >> $GITHUB_OUTPUT
+      # If it has release drafter:
+      - uses: release-drafter/release-drafter@v6
+        if: steps.check_release_drafter.outputs.has_release_drafter == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          commitish: ${{ steps.extract_branch.outputs.value }}
+      # Otherwise:
+      - name: Export Gradle Properties
+        if: steps.check_release_drafter.outputs.has_release_drafter == 'false'
+        uses: apache/grails-github-actions/export-gradle-properties@asf
+      - uses: apache/grails-github-actions/release-notes@asf
+        if: steps.check_release_drafter.outputs.has_release_drafter == 'false'
+        id: release_notes
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+      - uses: ncipollo/release-action@1e3e9c6637e5566e185b7ab66f187539c5a76da7
+        if: steps.check_release_drafter.outputs.has_release_drafter == 'false' && steps.release_notes.outputs.generated_changelog == 'true'
+        with:
+          allowUpdates: true
+          commit: ${{ steps.release_notes.outputs.current_branch }}
+          draft: true
+          name: ${{ env.title }} ${{ steps.release_notes.outputs.next_version }}
+          tag: v${{ steps.release_notes.outputs.next_version }}
+          bodyFile: CHANGELOG.md
+          token: ${{ secrets.GH_TOKEN }}
