@@ -14,6 +14,8 @@ github:
         - id: jdaugherty
           type: User
       wait_timer: 0
+  github:
+    ghp_branch: gh-pages
   features:
     issues: true
     projects: true
