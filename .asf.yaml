@@ -14,3 +14,24 @@ github:
         - id: jdaugherty
           type: User
       wait_timer: 0
+  features:
+    issues: true
+    projects: true
+    discussions: true
+  description: "Apache Grails (incubating) - Gradle Plugin - Grails Publish"
+  homepage: https://grails.apache.org/
+  labels:
+    - gradle-plugin
+    - grails
+    - apache
+notifications:
+  # GitHub related
+  commits: commits@grails.apache.org
+  jobs: notifications@grails.apache.org
+  pullrequests_status: notifications@grails.apache.org
+  pullrequests_comment: notifications@grails.apache.org
+  pullrequests_bot_dependabot: notifications@grails.apache.org
+  issues: notifications@grails.apache.org
+  issues_status: notifications@grails.apache.org
+  issues_comment: notifications@grails.apache.org
+  discussions: users@grails.apache.org
