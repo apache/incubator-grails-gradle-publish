@@ -1,4 +1,15 @@
 github:
+  features:
+    issues: true
+    projects: true
+    discussions: true
+  description: "Apache Grails (incubating) - Gradle Plugin - Grails Publish"
+  homepage: https://grails.apache.org/
+  labels:
+    - gradle-plugin
+    - grails
+    - apache
+  ghp_branch: gh-pages
   environments:
     release:
       required_reviewers:
@@ -14,17 +25,6 @@ github:
         - id: jdaugherty
           type: User
       wait_timer: 0
-  ghp_branch: gh-pages
-  features:
-    issues: true
-    projects: true
-    discussions: true
-  description: "Apache Grails (incubating) - Gradle Plugin - Grails Publish"
-  homepage: https://grails.apache.org/
-  labels:
-    - gradle-plugin
-    - grails
-    - apache
 notifications:
   # GitHub related
   commits: commits@grails.apache.org
