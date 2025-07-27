@@ -377,39 +377,41 @@ Note: if project properties are used, the properties must be defined prior to ap
                             }
 
                             // fix dependencies without a version
-                            def mavenPomNamespace = 'http://maven.apache.org/POM/4.0.0'
-                            def dependenciesQName = new QName(mavenPomNamespace, 'dependencies')
-                            def dependencyQName = new QName(mavenPomNamespace, 'dependency')
-                            def versionQName = new QName(mavenPomNamespace, 'version')
-                            def groupIdQName = new QName(mavenPomNamespace, 'groupId')
-                            def artifactIdQName = new QName(mavenPomNamespace, 'artifactId')
-                            def nodes = (pomNode.getAt(dependenciesQName) as NodeList)
-                            if (nodes) {
-                                def dependencyNodes = (nodes.first() as Node).getAt(dependencyQName)
-                                dependencyNodes.findAll { dependencyNode ->
-                                    def versionNodes = (dependencyNode as Node).getAt(versionQName)
-                                    return versionNodes.size() == 0 || (versionNodes.first() as Node).text().isEmpty()
-                                }.each { dependencyNode ->
-                                    def groupId = ((dependencyNode as Node).getAt(groupIdQName).first() as Node).text()
-                                    def artifactId = ((dependencyNode as Node).getAt(artifactIdQName).first() as Node).text()
-                                    def resolvedArtifacts = project.configurations.compileClasspath.resolvedConfiguration.resolvedArtifacts +
-                                            project.configurations.runtimeClasspath.resolvedConfiguration.resolvedArtifacts
-                                    if (project.configurations.hasProperty('testFixturesCompileClasspath')) {
-                                        resolvedArtifacts += project.configurations.testFixturesCompileClasspath.resolvedConfiguration.resolvedArtifacts +
-                                                project.configurations.testFixturesRuntimeClasspath.resolvedConfiguration.resolvedArtifacts
-                                    }
-                                    def managedVersion = resolvedArtifacts.find {
-                                        it.moduleVersion.id.group == groupId &&
-                                                it.moduleVersion.id.name == artifactId
-                                    }?.moduleVersion?.id?.version
-                                    if (!managedVersion) {
-                                        throw new RuntimeException("No version found for dependency $groupId:$artifactId.")
-                                    }
-                                    def versionNode = (dependencyNode as Node).getAt(versionQName)
-                                    if (versionNode) {
-                                        (versionNode.first() as Node).value = managedVersion
-                                    } else {
-                                        (dependencyNode as Node).appendNode('version', managedVersion)
+                            if (gpe.transitiveDependencies.get()) {
+                                def mavenPomNamespace = 'http://maven.apache.org/POM/4.0.0'
+                                def dependenciesQName = new QName(mavenPomNamespace, 'dependencies')
+                                def dependencyQName = new QName(mavenPomNamespace, 'dependency')
+                                def versionQName = new QName(mavenPomNamespace, 'version')
+                                def groupIdQName = new QName(mavenPomNamespace, 'groupId')
+                                def artifactIdQName = new QName(mavenPomNamespace, 'artifactId')
+                                def nodes = (pomNode.getAt(dependenciesQName) as NodeList)
+                                if (nodes) {
+                                    def dependencyNodes = (nodes.first() as Node).getAt(dependencyQName)
+                                    dependencyNodes.findAll { dependencyNode ->
+                                        def versionNodes = (dependencyNode as Node).getAt(versionQName)
+                                        return versionNodes.size() == 0 || (versionNodes.first() as Node).text().isEmpty()
+                                    }.each { dependencyNode ->
+                                        def groupId = ((dependencyNode as Node).getAt(groupIdQName).first() as Node).text()
+                                        def artifactId = ((dependencyNode as Node).getAt(artifactIdQName).first() as Node).text()
+                                        def resolvedArtifacts = project.configurations.compileClasspath.resolvedConfiguration.resolvedArtifacts +
+                                                project.configurations.runtimeClasspath.resolvedConfiguration.resolvedArtifacts
+                                        if (project.configurations.hasProperty('testFixturesCompileClasspath')) {
+                                            resolvedArtifacts += project.configurations.testFixturesCompileClasspath.resolvedConfiguration.resolvedArtifacts +
+                                                    project.configurations.testFixturesRuntimeClasspath.resolvedConfiguration.resolvedArtifacts
+                                        }
+                                        def managedVersion = resolvedArtifacts.find {
+                                            it.moduleVersion.id.group == groupId &&
+                                                    it.moduleVersion.id.name == artifactId
+                                        }?.moduleVersion?.id?.version
+                                        if (!managedVersion) {
+                                            throw new RuntimeException("No version found for dependency $groupId:$artifactId.")
+                                        }
+                                        def versionNode = (dependencyNode as Node).getAt(versionQName)
+                                        if (versionNode) {
+                                            (versionNode.first() as Node).value = managedVersion
+                                        } else {
+                                            (dependencyNode as Node).appendNode('version', managedVersion)
+                                        }
                                     }
                                 }
                             }

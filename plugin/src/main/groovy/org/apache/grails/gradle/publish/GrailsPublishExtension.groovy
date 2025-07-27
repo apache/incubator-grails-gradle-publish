@@ -121,6 +121,11 @@ class GrailsPublishExtension {
      */
     final Property<Directory> testRepositoryPath
 
+    /**
+     * Validate that any transitive dependency has a version set in the pom & try to set it if not defined
+     */
+    final Property<Boolean> transitiveDependencies
+
     @Inject
     GrailsPublishExtension(ObjectFactory objects, Project project) {
         githubSlug = objects.property(String).convention(
@@ -164,9 +169,10 @@ class GrailsPublishExtension {
             project.group as String
         })
         publishTestSources = objects.property(Boolean).convention(false)
+        testRepositoryPath = objects.directoryProperty().convention(null as Directory)
         addComponents = objects.property(Boolean).convention(true)
         publicationName = objects.property(String).convention('maven')
-        testRepositoryPath = objects.directoryProperty().convention(null as Directory)
+        transitiveDependencies = objects.property(Boolean).convention(true)
     }
 
     License getLicense() {
