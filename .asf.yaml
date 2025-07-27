@@ -10,6 +10,7 @@ github:
     - grails
     - apache
   ghp_branch: gh-pages
+  # forced update to pickup the right path
   ghp_path: /
   environments:
     release:
