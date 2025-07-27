@@ -247,11 +247,16 @@ extends java.lang.Object</pre>
                         </tr>
                         
                         <tr class="altColor">
+                            <td class="colFirst"><code><strong>Property&lt;java.lang.Boolean&gt;</strong></code>&nbsp;</td>
+                            <td class="colLast"><code><a href="#transitiveDependencies">transitiveDependencies</a></code><br>Validate that any transitive dependency has a version set in the pom & try to set it if not defined</td>
+                        </tr>
+                        
+                        <tr class="rowColor">
                             <td class="colFirst"><code><strong>Property&lt;java.lang.String&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#vcsUrl">vcsUrl</a></code><br>The source control URL of the project</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code><strong>Property&lt;java.lang.String&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#websiteUrl">websiteUrl</a></code><br>The website URL of the published project; defaulted by the github slug if not set</td>
                         </tr>
@@ -513,6 +518,14 @@ extends java.lang.Object</pre>
                             <li class="blockList">
                                 <h4>final&nbsp;Property&lt;java.lang.String&gt; <strong>title</strong></h4>
                                 <p> Title of the project, defaults to the project name</p>
+                            </li>
+                        </ul>
+                    
+                        <a name="transitiveDependencies"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>final&nbsp;Property&lt;java.lang.Boolean&gt; <strong>transitiveDependencies</strong></h4>
+                                <p> Validate that any transitive dependency has a version set in the pom & try to set it if not defined</p>
                             </li>
                         </ul>
                     
