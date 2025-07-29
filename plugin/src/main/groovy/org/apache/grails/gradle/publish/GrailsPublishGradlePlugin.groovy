@@ -376,7 +376,12 @@ Note: if project properties are used, the properties must be defined prior to ap
                                 gpe.pomCustomization.call()
                             }
 
-                            // fix dependencies without a version
+                            // fix dependencies without a version, this can occur when the spring dependency management plugin is used
+                            // disabling that plugin will cause gradle to fail on any unresolved, or by disabling the check with:
+                            // https://github.com/gradle/gradle/issues/23030
+                            //tasks.withType(GenerateModuleMetadata).configureEach {
+                            //    suppressedValidationErrors.add('dependencies-without-versions')
+                            //}
                             if (gpe.transitiveDependencies.get()) {
                                 def mavenPomNamespace = 'http://maven.apache.org/POM/4.0.0'
                                 def dependenciesQName = new QName(mavenPomNamespace, 'dependencies')
