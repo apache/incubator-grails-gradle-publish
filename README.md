@@ -22,6 +22,13 @@ Grails Publish is a Gradle plugin to ease publishing with the maven publish plug
 Artifacts published by this plugin include sources, the jar file, and a javadoc jar that contains both the groovydoc &
 javadoc.
 
+Limitations
+---
+
+This plugin currently acts as a wrapper around the `maven-publish` & `nexus-publish` plugins. There are known
+limitations with the `nexus-publish` plugin - specifically, when it can be applied in multiproject setups. Check out the
+functional test resources for specific scenarios that work and do not work.
+
 Setup
 ---
 If obtaining the source from the source distribution and you intend to build from source, you also need to download and
@@ -55,9 +62,15 @@ buildscript {
 }
 ```
 
-Usage
+And then apply the plugin:
+
+```groovy
+apply plugin: 'org.apache.grails.gradle.grails-publish'
+```
+
+Configuration
 ---
-Example Usage:
+Example Configuration:
 
     grailsPublish {
         websiteUrl = 'http://foo.com/myplugin'
@@ -104,4 +117,5 @@ The credentials and connection url must be specified as a project property or an
     NEXUS_PUBLISH_STAGING_PROFILE_ID
 
 By default, the release or snapshot state is determined by the project.version or projectVersion gradle property. To
-override this behavior, use the environment variable `GRAILS_PUBLISH_RELEASE` to decide if it's a release or snapshot.
+override this behavior, use the environment variable `GRAILS_PUBLISH_RELEASE` with a boolean value to decide if it's a
+release or snapshot.
