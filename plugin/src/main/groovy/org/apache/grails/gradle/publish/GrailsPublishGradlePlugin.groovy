@@ -570,11 +570,7 @@ Note: if project properties are used, the properties must be defined prior to ap
         boolean hasJavaPlatform = project.extensions.findByType(JavaPlatformExtension) as JavaPlatformExtension
 
         if (!hasJavaPlugin && !hasJavaPlatform) {
-            if (!hasJavaPlugin) {
-                throw new RuntimeException('Grails Publish Plugin requires the Java Plugin to be applied to the project.')
-            }
-
-            throw new RuntimeException('Grails Publish Plugin requires the Java Platform Plugin to be applied to the project.')
+            throw new RuntimeException('Grails Publish Plugin requires the Java Platform or Java Plugin to be applied to the project.')
         }
 
         if (hasJavaPlatform) {
