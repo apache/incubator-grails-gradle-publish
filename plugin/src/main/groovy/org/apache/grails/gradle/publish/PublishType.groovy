@@ -18,6 +18,9 @@
  */
 package org.apache.grails.gradle.publish
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 enum PublishType {
 
     MAVEN_PUBLISH,
