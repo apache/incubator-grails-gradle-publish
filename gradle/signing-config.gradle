@@ -18,6 +18,10 @@
  */
 import io.github.gradlenexus.publishplugin.InitializeNexusStagingRepository
 
+ext.set('signing.keyId', findProperty('signing.keyId') ?: System.getenv('SIGNING_KEY'))
+ext.set('signing.password', findProperty('signing.password') ?: System.getenv('SIGNING_PASSPHRASE'))
+ext.set('signing.secretKeyRingFile', findProperty('signing.secretKeyRingFile') ?: "${System.properties['user.home']}${File.separator}.gnupg${File.separator}secring.gpg")
+
 if (isReleaseVersion) {
     apply plugin: 'signing'
 

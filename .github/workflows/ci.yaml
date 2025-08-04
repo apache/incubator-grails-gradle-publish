@@ -17,7 +17,7 @@ name: "CI"
 on:
   push:
     branches:
-      - '[4-9]+.[0-9]+.x'
+      - '[0-9]+.[0-9]+.x'
   pull_request:
   workflow_dispatch:
 # queue jobs and only allow 1 run per branch due to the likelihood of hitting GitHub resource limits
@@ -26,14 +26,14 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build:
-    name: 'Build'
+    name: "Build Project"
     strategy:
       fail-fast: false
       matrix:
         java: [ 17, 21 ]
     runs-on: ubuntu-24.04
     steps:
-      - name: "Output Agent IP" # in the event RAO blocks this agent, this can be used to debug it
+      - name: "🌐 Output Agent IP" # in the event RAO blocks this agent, this can be used to debug it
         run: curl -s https://api.ipify.org
       - name: "📥 Checkout repository"
         uses: actions/checkout@v4
@@ -45,25 +45,28 @@ jobs:
       - name: "🐘 Setup Gradle"
         uses: gradle/actions/setup-gradle@v4
         with:
-          develocity-access-key: ${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY  }}
-      - name: "🔨 Build project without tests"
+          develocity-access-key: ${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY }}
+      - name: "🔨 Build Project (without tests)"
         if: ${{ contains(github.event.head_commit.message, '[skip tests]') }}
         run: >
           ./gradlew build
-          --continue --stacktrace -PskipTests
-      - name: "🔨 Build project with tests"
+          -PskipTests
+          --continue
+          --stacktrace
+      - name: "🔨 Build and Test Project"
         if: ${{ !contains(github.event.head_commit.message, '[skip tests]') }}
         run: >
           ./gradlew build
-          --continue --stacktrace
+          --continue
+          --stacktrace
           --rerun-tasks
   publish:
     if: github.repository_owner == 'apache' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    name: 'Publish'
+    name: 'Publish Snapshot Artifacts'
     needs: [ build ]
     runs-on: ubuntu-24.04
     steps:
-      - name: "Output Agent IP" # in the event RAO blocks this agent, this can be used to debug it
+      - name: "🌐 Output Agent IP" # in the event RAO blocks this agent, this can be used to debug it
         run: curl -s https://api.ipify.org
       - name: "📥 Checkout repository"
         uses: actions/checkout@v4
@@ -75,8 +78,8 @@ jobs:
       - name: "🐘 Setup Gradle"
         uses: gradle/actions/setup-gradle@v4
         with:
-          develocity-access-key: ${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY  }}
-      - name: "📤 Publish Gradle Snapshot Artifacts"
+          develocity-access-key: ${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY }}
+      - name: "📤 Publish Snapshot Artifacts"
         env:
           GRAILS_PUBLISH_RELEASE: 'false'
           MAVEN_PUBLISH_URL: 'https://repository.apache.org/content/repositories/snapshots'
@@ -84,7 +87,9 @@ jobs:
           MAVEN_PUBLISH_PASSWORD: ${{ secrets.NEXUS_PW  }}
         run: >
           ./gradlew publish aggregateChecksums aggregatePublishedArtifacts
-          -Dorg.gradle.internal.publish.checksums.insecure=true --no-build-cache --rerun-tasks
+          --no-build-cache
+          --rerun-tasks
+          -Dorg.gradle.internal.publish.checksums.insecure=true
       - name: "📤 Upload checksums"
         uses: actions/upload-artifact@v4
         with:
@@ -96,8 +101,10 @@ jobs:
           name: PUBLISHED_ARTIFACTS.txt
           path: build/PUBLISHED_ARTIFACTS.txt
       - name: "🔨 Generate Snapshot Documentation"
-        run: ./gradlew grails-publish:groovydoc -PgithubBranch=${{ needs.publish.outputs.target_branch }}
-      - name: "🚀 Publish to Github Pages"
+        run: >
+          ./gradlew grails-publish:groovydoc
+          -PgithubBranch=${{ needs.publish.outputs.target_branch }}
+      - name: "🚀 Publish Snapshot Documentation to Github Pages"
         uses: apache/grails-github-actions/deploy-github-pages@asf
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

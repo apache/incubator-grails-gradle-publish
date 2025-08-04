@@ -25,14 +25,14 @@ tasks.withType(Wrapper).configureEach {
     gradleVersion = props.gradle
 }
 
-defaultTasks 'bootstrap'
+defaultTasks('bootstrap')
 tasks.register('bootstrap') {
-    dependsOn 'wrapper'
+    dependsOn('wrapper')
     doLast {
-        ant.move file: "${projectDir}/gradlew", todir: "${projectDir}/../"
-        ant.move file: "${projectDir}/gradlew.bat", todir: "${projectDir}/../"
-        ant.move file: "${projectDir}/gradle/wrapper", todir: "${projectDir}/../gradle"
-        ant.chmod(file: "${projectDir}/../gradlew", perm: '755')
-        ant.chmod(file: "${projectDir}/../gradlew.bat", perm: '755')
+        ant.move(file: "$projectDir/gradlew", todir: "$projectDir/../")
+        ant.move(file: "$projectDir/gradlew.bat", todir: "$projectDir/../")
+        ant.move(file: "$projectDir/gradle/wrapper", todir: "$projectDir/../gradle")
+        ant.chmod(file: "$projectDir/../gradlew", perm: '755')
+        ant.chmod(file: "$projectDir/../gradlew.bat", perm: '755')
     }
 }
