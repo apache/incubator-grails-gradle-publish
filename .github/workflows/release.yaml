@@ -25,8 +25,8 @@ jobs:
   publish:
     name: "Stage Artifacts for Release"
     permissions:
-      contents: write  #  to create, release and upload wrapper (TODO: there is no wrapper in this project, is this needed?, can we re-phrase?)
-      issues: write  #  to modify milestones
+      contents: write # to stage distributions to the GitHub release page
+      issues: write # to modify milestones
     runs-on: ubuntu-24.04
     outputs:
       release_version: ${{ steps.release_version.outputs.value }}
@@ -341,7 +341,7 @@ jobs:
           echo "*************************************************"
           echo "Body:"
           echo "*************************************************"
-          cat .github/vote_templates/staged.txt | envsubst
+          cat grails-publish/.github/vote_templates/staged.txt | envsubst
           echo "*************************************************"
       - name: '📧 Print Groovy Vote Email'
         env:
@@ -355,7 +355,7 @@ jobs:
           echo "*************************************************"
           echo "Body:"
           echo "*************************************************"
-          cat grails-core/.github/vote_templates/groovy_pmc.txt | envsubst
+          cat grails-publish/.github/vote_templates/groovy_pmc.txt | envsubst
           echo "*************************************************"
       - name: 'Announcement Email'
         env:
@@ -370,7 +370,7 @@ jobs:
           echo "*************************************************"
           echo "Body:"
           echo "*************************************************"
-          cat grails-core/.github/vote_templates/announce.txt | envsubst
+          cat grails-publish/.github/vote_templates/announce.txt | envsubst
           echo "*************************************************"
   docs:
     environment: docs
