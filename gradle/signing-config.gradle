@@ -19,7 +19,12 @@
 import io.github.gradlenexus.publishplugin.InitializeNexusStagingRepository
 
 if (isReleaseVersion) {
+
     apply plugin: 'signing'
+
+    ext.set('signing.keyId', findProperty('signing.keyId') ?: System.getenv('SIGNING_KEY'))
+    ext.set('signing.password', findProperty('signing.password') ?: System.getenv('SIGNING_PASSPHRASE'))
+    ext.set('signing.secretKeyRingFile', findProperty('signing.secretKeyRingFile') ?: "${System.properties['user.home']}${File.separator}.gnupg${File.separator}secring.gpg")
 
     afterEvaluate {
         signing {
@@ -36,7 +41,7 @@ if (isReleaseVersion) {
         onlyIf { isReleaseVersion }
     }
 
-    project.rootProject.tasks.withType(InitializeNexusStagingRepository).configureEach { InitializeNexusStagingRepository task ->
-        task.shouldRunAfter = project.tasks.withType(Sign)
+    rootProject.tasks.withType(InitializeNexusStagingRepository).configureEach {
+        shouldRunAfter = tasks.withType(Sign)
     }
 }

@@ -19,7 +19,7 @@ Binary distributions: https://dist.apache.org/repos/dist/dev/incubator/grails/gr
 Release artifacts are signed with a key from the following file:
 https://dist.apache.org/repos/dist/release/incubator/grails/KEYS
 
-Please vote on releasing this package as Apache Grails (incubating) - Gradle Plugin - Grails Publish ${VERSION}.
+Please vote on releasing this package as Apache Grails (incubating) - Grails Publish Gradle Plugin ${VERSION}.
 
 Reminder on ASF release approval requirements for PPMC members:
 https://www.apache.org/legal/release-policy.html#release-approval
@@ -27,12 +27,12 @@ https://www.apache.org/legal/release-policy.html#release-approval
 Hints on validating checksums/signatures (but replace md5sum with sha512sum):
 https://www.apache.org/info/verification.html
 
-The vote is open for the next 72 hours and passes if a majority of at least
+The vote is open for a minimum of 72 hours and passes if a majority of at least
 three +1 PPMC votes are cast.
 
-[ ] +1 Release Apache Grails (incubating) - Gradle Plugin - Grails Publish ${VERSION}
+[ ] +1 Release Apache Grails (incubating) - Grails Publish Gradle Plugin ${VERSION}
 [ ]  0 I don't have a strong opinion about this, but I assume it's ok
-[ ] -1 Do not release Apache Grails (incubating) - Gradle Plugin - Grails Publish ${VERSION} because...
+[ ] -1 Do not release Apache Grails (incubating) - Grails Publish Gradle Plugin ${VERSION} because...
 
 Here is my vote:
 
