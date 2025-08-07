@@ -41,6 +41,7 @@ jobs:
       - name: "📥 Checkout repository"
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.GITHUB_TOKEN }} # This should not be needed as ${{ github.token }} is the default, but there have been issues with it.
           ref: ${{ github.ref }}
           fetch-depth: 1
           fetch-tags: true
@@ -152,6 +153,7 @@ jobs:
       - name: "📥 Checkout repository"
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.GITHUB_TOKEN }} # This should not be needed as ${{ github.token }} is the default, but there have been issues with it.
           ref: v${{ needs.publish.outputs.release_version }}
           path: 'grails-publish'
       - name: "🗑️ Remove unnecessary files"
@@ -324,6 +326,7 @@ jobs:
       - name: "📥 Checkout repository"
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.GITHUB_TOKEN }} # This should not be needed as ${{ github.token }} is the default, but there have been issues with it.
           ref: v${{ needs.publish.outputs.release_version }}
           path: 'grails-publish'
       - name: "📧 Print Grails Vote Email"
@@ -378,6 +381,7 @@ jobs:
       - name: "📥 Checkout repository"
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.GITHUB_TOKEN }} # This should not be needed as ${{ github.token }} is the default, but there have been issues with it.
           fetch-depth: 0 # need the full history to find all tags
           ref: v${{ needs.publish.outputs.release_version }}
       - name: "📅 Ensure Common Build Date" # to ensure a reproducible build
@@ -415,6 +419,7 @@ jobs:
       - name: "📥 Checkout repository"
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.GITHUB_TOKEN }} # This should not be needed as ${{ github.token }} is the default, but there have been issues with it.
           ref: v${{ needs.publish.outputs.release_version }}
       - name: "📅 Ensure Common Build Date" # to ensure a reproducible build
         run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> "$GITHUB_ENV"
