@@ -572,7 +572,7 @@ class GrailsPublishPluginSpec extends GradleSpecification {
 
         then:
         UnexpectedBuildFailure bf = thrown(UnexpectedBuildFailure)
-        bf.buildResult.output.contains("Grails Publish Plugin requires the Java Plugin to be applied to the project.")
+        bf.buildResult.output.contains("Grails Publish Plugin requires the Java Platform or Java Plugin to be applied to the project.")
     }
 
     @PendingFeature

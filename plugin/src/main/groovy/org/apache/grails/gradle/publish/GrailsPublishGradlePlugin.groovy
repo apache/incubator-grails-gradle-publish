@@ -80,7 +80,7 @@ class GrailsPublishGradlePlugin implements Plugin<Project> {
     public static String SNAPSHOT_PUBLISH_TYPE_PROPERTY = 'snapshotPublishType'
     public static String RELEASE_PUBLISH_TYPE_PROPERTY = 'releasePublishType'
 
-    static String getErrorMessage(String missingSetting) {
+    static String createErrorMessage(String missingSetting) {
         return """No '$missingSetting' was specified. Please provide a valid publishing configuration. Example:
 
 grailsPublish {
@@ -352,7 +352,7 @@ Note: if project properties are used, the properties must be defined prior to ap
                                     }
                                 }
                             } else {
-                                throw new RuntimeException(getErrorMessage('license'))
+                                throw new RuntimeException(createErrorMessage('license'))
                             }
 
                             pom.scm { MavenPomScm scm ->
@@ -376,7 +376,7 @@ Note: if project properties are used, the properties must be defined prior to ap
                                     }
                                 }
                             } else {
-                                throw new RuntimeException(getErrorMessage('developers'))
+                                throw new RuntimeException(createErrorMessage('developers'))
                             }
 
                             pom.withXml { XmlProvider xml ->
@@ -547,13 +547,13 @@ Note: if project properties are used, the properties must be defined prior to ap
 
         SourceSetContainer sourceSets = findSourceSets(project)
 
-        SourceSet main = sourceSets.named('main').get()
-        GroovySourceDirectorySet groovy = main.getExtensions().findByType(GroovySourceDirectorySet)
+        def main = sourceSets.named('main').get()
+        def groovy = main.getExtensions().findByType(GroovySourceDirectorySet)
         if (!groovy) {
             return null
         }
 
-        File pluginXml = groovy.getClassesDirectory().get().file('META-INF/grails-plugin.xml').asFile
+        def pluginXml = groovy.classesDirectory.get().file('META-INF/grails-plugin.xml').asFile
         pluginXml.exists() ? [
                 source    : pluginXml.canonicalPath,
                 classifier: getDefaultClassifier(),
@@ -566,14 +566,14 @@ Note: if project properties are used, the properties must be defined prior to ap
     }
 
     protected validateProjectPublishable(Project project) {
-        boolean hasJavaPlugin = project.extensions.findByType(JavaPluginExtension) as JavaPlatformExtension
-        boolean hasJavaPlatform = project.extensions.findByType(JavaPlatformExtension) as JavaPlatformExtension
+        def javaPlugin = project.extensions.findByType(JavaPluginExtension)
+        def javaPlatform = project.extensions.findByType(JavaPlatformExtension)
 
-        if (!hasJavaPlugin && !hasJavaPlatform) {
+        if (!javaPlugin && !javaPlatform) {
             throw new RuntimeException('Grails Publish Plugin requires the Java Platform or Java Plugin to be applied to the project.')
         }
 
-        if (hasJavaPlatform) {
+        if (javaPlatform) {
             return
         }
 

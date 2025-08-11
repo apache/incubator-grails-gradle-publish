@@ -26,7 +26,7 @@ import spock.lang.Specification
 
 class GrailsPublishGradlePluginTest extends Specification {
 
-    def "requires java or java platform plugin"() {
+    def 'requires java or java platform plugin'() {
         given:
         def project = ProjectBuilder.builder().build()
         project.version = '1.0.0'
@@ -37,7 +37,7 @@ class GrailsPublishGradlePluginTest extends Specification {
 
         then:
         def ge = thrown(GradleException)
-        ge.cause.message == "Grails Publish Plugin requires the Java Platform or Java Plugin to be applied to the project."
+        ge.cause.message == 'Grails Publish Plugin requires the Java Platform or Java Plugin to be applied to the project.'
     }
 
     def 'apply only: plugin registers release task for release version'() {
@@ -49,13 +49,26 @@ class GrailsPublishGradlePluginTest extends Specification {
         project.plugins.apply('org.apache.grails.gradle.grails-publish')
 
         then:
-        project.tasks.names.toList() == ["assemble", "build", "check", "clean", "closeAndReleaseSonatypeStagingRepository",
-                                         "closeAndReleaseStagingRepositories", "closeSonatypeStagingRepository", "closeStagingRepositories",
-                                         "findSonatypeStagingRepository", "initializeSonatypeStagingRepository", "publish", "publishToMavenLocal",
-                                         "releaseSonatypeStagingRepository", "releaseStagingRepositories", "retrieveSonatypeStagingProfile"]
+        project.tasks.names.toList() == project.tasks.names.toList() == [
+                'assemble',
+                'build',
+                'check',
+                'clean',
+                'closeAndReleaseSonatypeStagingRepository',
+                'closeAndReleaseStagingRepositories',
+                'closeSonatypeStagingRepository',
+                'closeStagingRepositories',
+                'findSonatypeStagingRepository',
+                'initializeSonatypeStagingRepository',
+                'publish',
+                'publishToMavenLocal',
+                'releaseSonatypeStagingRepository',
+                'releaseStagingRepositories',
+                'retrieveSonatypeStagingProfile',
+        ]
     }
 
-    def "evaluate: plugin registers release task for release version"() {
+    def 'evaluate: plugin registers release task for release version'() {
         given:
         def project = ProjectBuilder.builder().build()
         project.version = '1.0.0'
@@ -78,15 +91,63 @@ class GrailsPublishGradlePluginTest extends Specification {
         ((ProjectInternal) project).evaluate()
 
         then:
-        project.tasks.names.toList() == ["artifactTransforms", "assemble", "build", "buildDependents", "buildEnvironment", "buildNeeded", "check", "classes", "clean",
-                                         "closeAndReleaseSonatypeStagingRepository", "closeAndReleaseStagingRepositories", "closeSonatypeStagingRepository", "closeStagingRepositories",
-                                         "compileJava", "compileTestJava", "components", "dependencies", "dependencyInsight", "dependentComponents", "findSonatypeStagingRepository",
-                                         "generateMetadataFileForMavenPublication", "generatePomFileForMavenPublication", "grailsPublishValidation", "help", "init",
-                                         "initializeSonatypeStagingRepository", "install", "jar", "javaToolchains", "javadoc", "javadocJar", "model", "outgoingVariants",
-                                         "processResources", "processTestResources", "projects", "properties", "publish", "publishAllPublicationsToSonatypeRepository",
-                                         "publishMavenPublicationToMavenLocal", "publishMavenPublicationToSonatypeRepository", "publishToMavenLocal", "publishToSonatype",
-                                         "releaseSonatypeStagingRepository", "releaseStagingRepositories", "resolvableConfigurations", "retrieveSonatypeStagingProfile",
-                                         "signMavenPublication", "sourcesJar", "tasks", "test", "testClasses", "testSourcesJar", "updateDaemonJvm", "wrapper"]
+        project.tasks.names.toList() == [
+                'artifactTransforms',
+                'assemble',
+                'build',
+                'buildDependents',
+                'buildEnvironment',
+                'buildNeeded',
+                'check',
+                'classes',
+                'clean',
+                'closeAndReleaseSonatypeStagingRepository',
+                'closeAndReleaseStagingRepositories',
+                'closeSonatypeStagingRepository',
+                'closeStagingRepositories',
+                'compileJava',
+                'compileTestJava',
+                'components',
+                'dependencies',
+                'dependencyInsight',
+                'dependentComponents',
+                'findSonatypeStagingRepository',
+                'generateMetadataFileForMavenPublication',
+                'generatePomFileForMavenPublication',
+                'grailsPublishValidation',
+                'help',
+                'init',
+                'initializeSonatypeStagingRepository',
+                'install',
+                'jar',
+                'javaToolchains',
+                'javadoc',
+                'javadocJar',
+                'model',
+                'outgoingVariants',
+                'processResources',
+                'processTestResources',
+                'projects',
+                'properties',
+                'publish',
+                'publishAllPublicationsToSonatypeRepository',
+                'publishMavenPublicationToMavenLocal',
+                'publishMavenPublicationToSonatypeRepository',
+                'publishToMavenLocal',
+                'publishToSonatype',
+                'releaseSonatypeStagingRepository',
+                'releaseStagingRepositories',
+                'resolvableConfigurations',
+                'retrieveSonatypeStagingProfile',
+                'signMavenPublication',
+                'sourcesJar',
+                'tasks',
+                'test',
+                'testClasses',
+                'testSourcesJar',
+                'updateDaemonJvm',
+                'wrapper'
+        ]
     }
 
     def 'apply only:  plugin registers release task for snapshot version'() {
@@ -124,11 +185,51 @@ class GrailsPublishGradlePluginTest extends Specification {
         ((ProjectInternal) project).evaluate()
 
         then:
-        project.tasks.names.toList() == ["artifactTransforms", "assemble", "build", "buildDependents", "buildEnvironment", "buildNeeded", "check", "classes", "clean", "compileJava",
-                                         "compileTestJava", "components", "dependencies", "dependencyInsight", "dependentComponents", "generateMetadataFileForMavenPublication",
-                                         "generatePomFileForMavenPublication", "grailsPublishValidation", "help", "init", "install", "jar", "javaToolchains", "javadoc", "javadocJar",
-                                         "model", "outgoingVariants", "processResources", "processTestResources", "projects", "properties", "publish",
-                                         "publishAllPublicationsToMavenRepository", "publishMavenPublicationToMavenLocal", "publishMavenPublicationToMavenRepository",
-                                         "publishToMavenLocal", "resolvableConfigurations", "sourcesJar", "tasks", "test", "testClasses", "testSourcesJar", "updateDaemonJvm", "wrapper"]
+        project.tasks.names.toList() == [
+                'artifactTransforms',
+                'assemble',
+                'build',
+                'buildDependents',
+                'buildEnvironment',
+                'buildNeeded',
+                'check',
+                'classes',
+                'clean',
+                'compileJava',
+                'compileTestJava',
+                'components',
+                'dependencies',
+                'dependencyInsight',
+                'dependentComponents',
+                'generateMetadataFileForMavenPublication',
+                'generatePomFileForMavenPublication',
+                'grailsPublishValidation',
+                'help',
+                'init',
+                'install',
+                'jar',
+                'javaToolchains',
+                'javadoc',
+                'javadocJar',
+                'model',
+                'outgoingVariants',
+                'processResources',
+                'processTestResources',
+                'projects',
+                'properties',
+                'publish',
+                'publishAllPublicationsToMavenRepository',
+                'publishMavenPublicationToMavenLocal',
+                'publishMavenPublicationToMavenRepository',
+                'publishToMavenLocal',
+                'resolvableConfigurations',
+                'sourcesJar',
+                'tasks',
+                'test',
+                'testClasses',
+                'testSourcesJar',
+                'updateDaemonJvm',
+                'wrapper'
+        ]
     }
 }
