@@ -49,7 +49,7 @@ class GrailsPublishGradlePluginTest extends Specification {
         project.plugins.apply('org.apache.grails.gradle.grails-publish')
 
         then:
-        project.tasks.names.toList() == project.tasks.names.toList() == [
+        project.tasks.names.toList() == [
                 'assemble',
                 'build',
                 'check',
