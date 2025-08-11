@@ -3,7 +3,7 @@ github:
     issues: true
     projects: true
     discussions: true
-  description: "Apache Grails (incubating) - Gradle Plugin - Grails Publish"
+  description: "Apache Grails (incubating) - Grails Publish Gradle Plugin"
   homepage: https://grails.apache.org/
   labels:
     - gradle-plugin
