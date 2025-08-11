@@ -106,7 +106,8 @@ if (location.href.indexOf('is-external=true') == -1) {
             <!-- todo: direct known subclasses -->
             <hr>
 
-<pre>class GrailsPublishGradlePlugin
+<pre>@groovy.transform.CompileStatic
+class GrailsPublishGradlePlugin
 extends java.lang.Object
 implements Plugin&lt;Project&gt;</pre>
 
@@ -239,26 +240,26 @@ implements Plugin&lt;Project&gt;</pre>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code>static&nbsp;java.lang.String</code></td>
+                            <td class="colLast"><code><strong><a href="#createErrorMessage(java.lang.String)">createErrorMessage</a></strong>(java.lang.String missingSetting)</code><br></td>
+                        </tr>
+                        
+                        <tr class="rowColor">
+                            <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>protected&nbsp;void</code></td>
                             <td class="colLast"><code><strong><a href="#doAddArtefact(org.gradle.api.Project, org.gradle.api.publish.maven.MavenPublication)">doAddArtefact</a></strong>(<a href='../../../../../org.gradle.api.Project.html'>Project</a> project, <a href='../../../../../org.gradle.api.publish.maven.MavenPublication.html'>MavenPublication</a> publication)</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>protected&nbsp;java.lang.String</code></td>
                             <td class="colLast"><code><strong><a href="#getDefaultClassifier()">getDefaultClassifier</a></strong>()</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>protected&nbsp;java.util.Map&lt;java.lang.String, java.lang.String&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#getDefaultExtraArtifact(org.gradle.api.Project)">getDefaultExtraArtifact</a></strong>(<a href='../../../../../org.gradle.api.Project.html'>Project</a> project)</code><br></td>
-                        </tr>
-                        
-                        <tr class="rowColor">
-                            <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>java.lang.String</code></td>
-                            <td class="colLast"><code><strong><a href="#getErrorMessage(java.lang.String)">getErrorMessage</a></strong>(java.lang.String missingSetting)</code><br></td>
                         </tr>
                         
                         <tr class="altColor">
@@ -268,6 +269,12 @@ implements Plugin&lt;Project&gt;</pre>
                         </tr>
                         
                         <tr class="rowColor">
+                            <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code>protected&nbsp;void</code></td>
+                            <td class="colLast"><code><strong><a href="#setDependencyVersions(groovy.util.Node, org.gradle.api.Project)">setDependencyVersions</a></strong>(groovy.util.Node pomNode, <a href='../../../../../org.gradle.api.Project.html'>Project</a> project)</code><br></td>
+                        </tr>
+                        
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>protected&nbsp;java.lang.Object</code></td>
                             <td class="colLast"><code><strong><a href="#validateProjectPublishable(org.gradle.api.Project)">validateProjectPublishable</a></strong>(<a href='../../../../../org.gradle.api.Project.html'>Project</a> project)</code><br></td>
@@ -415,6 +422,14 @@ implements Plugin&lt;Project&gt;</pre>
                             </li>
                         </ul>
                     
+                        <a name="createErrorMessage(java.lang.String)"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>static&nbsp;java.lang.String <strong>createErrorMessage</strong>(java.lang.String missingSetting)</h4>
+                                <p></p>
+                            </li>
+                        </ul>
+                    
                         <a name="doAddArtefact(org.gradle.api.Project, org.gradle.api.publish.maven.MavenPublication)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
@@ -439,18 +454,18 @@ implements Plugin&lt;Project&gt;</pre>
                             </li>
                         </ul>
                     
-                        <a name="getErrorMessage(java.lang.String)"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>java.lang.String <strong>getErrorMessage</strong>(java.lang.String missingSetting)</h4>
-                                <p></p>
-                            </li>
-                        </ul>
-                    
                         <a name="registerValidationTask(org.gradle.api.Project, java.lang.String, groovy.lang.Closure)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>protected&nbsp;void <strong>registerValidationTask</strong>(<a href='../../../../../org.gradle.api.Project.html'>Project</a> project, java.lang.String taskName, groovy.lang.Closure c)</h4>
+                                <p></p>
+                            </li>
+                        </ul>
+                    
+                        <a name="setDependencyVersions(groovy.util.Node, org.gradle.api.Project)"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>protected&nbsp;void <strong>setDependencyVersions</strong>(groovy.util.Node pomNode, <a href='../../../../../org.gradle.api.Project.html'>Project</a> project)</h4>
                                 <p></p>
                             </li>
                         </ul>
