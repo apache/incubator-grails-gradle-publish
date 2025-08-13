@@ -393,9 +393,9 @@ Note: if project properties are used, the properties must be defined prior to ap
                                 }
 
                                 if (gpe.pomCustomization) {
-                                    gpe.pomCustomization.delegate = xml
+                                    gpe.pomCustomization.delegate = pom
                                     gpe.pomCustomization.resolveStrategy = Closure.DELEGATE_FIRST
-                                    gpe.pomCustomization.call()
+                                    gpe.pomCustomization.call(xml)
                                 }
 
                                 // fix dependencies without a version, this can occur when the spring dependency management plugin is used
