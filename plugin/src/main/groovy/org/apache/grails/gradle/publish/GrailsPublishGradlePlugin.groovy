@@ -393,7 +393,7 @@ Note: if project properties are used, the properties must be defined prior to ap
                                 }
 
                                 if (gpe.pomCustomization) {
-                                    gpe.pomCustomization.delegate = publication
+                                    gpe.pomCustomization.delegate = xml
                                     gpe.pomCustomization.resolveStrategy = Closure.DELEGATE_FIRST
                                     gpe.pomCustomization.call()
                                 }
