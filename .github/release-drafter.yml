@@ -26,6 +26,11 @@ autolabeler:
       - '/fix\/.+/'
     title:
       - '/fix/i'
+  - label: 'improvement'
+    branch:
+      - '/improv\/.+/'
+    title:
+      - '/improv/i'
   - label: 'feature'
     branch:
       - '/feature\/.+/'
@@ -38,9 +43,9 @@ autolabeler:
       - '/docs/i'
   - label: 'maintenance'
     branch:
-      - '/(chore|refactor|style|test|ci|perf|build|deps)\/.+/'
+      - '/(chore|refactor|style|test|ci|perf|build)\/.+/'
     title:
-      - '/(chore|refactor|style|test|ci|perf|build|deps)/i'
+      - '/(chore|refactor|style|test|ci|perf|build)/i'
   - label: 'chore'
     branch:
       - '/chore\/.+/'
@@ -89,21 +94,27 @@ autolabeler:
 categories:
   - title: '🚀 Features'
     labels:
-      - 'feat'
+      - 'feature'
       - "type: enhancement"
       - "type: new feature"
       - "type: major"
+      - "type: minor"
+  - title: '💡 Improvements'
+    labels:
+      - 'improvement'
+      - "type: improvement"
+
   - title: '🐛 Bug Fixes'
     labels:
       - 'fix'
-      - "type: improvement"
+      - 'bug'
       - "type: bug"
-      - "type: minor"
   - title: '📚 Documentation'
     labels:
       - 'docs'
   - title: '🔧 Maintenance'
     labels:
+      - 'maintenance'
       - 'chore'
       - 'refactor'
       - 'style'
@@ -111,9 +122,6 @@ categories:
       - 'ci'
       - 'perf'
       - 'build'
-      - 'deps'
-      - "type: dependency upgrade"
-      - "dependencies"
       - "type: ci"
       - "type: build"
   - title: '⏪ Reverts'
@@ -132,6 +140,10 @@ version-resolver:
       - 'type: patch'
   default: patch
 template: |
+  ## Disclaimer: Release Created While Under Incubation
+  
+  Apache Grails is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Groovy Project. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+  
   ## What's Changed
 
   $CHANGES
