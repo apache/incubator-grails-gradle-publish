@@ -64,7 +64,7 @@ testing {
 }
 
 tasks.named('functionalTest').configure { Test it ->
-    def skipTests = hasProperty('skipTests')
+    def skipTests = project.hasProperty('skipTests')
     it.onlyIf {
         !skipTests
     }
