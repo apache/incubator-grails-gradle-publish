@@ -16,11 +16,7 @@
 name: "Licensing - RAT Report"
 on:
   push:
-    branches:
-      - '[0-9]+.[0-9]+.x'
   pull_request:
-    branches:
-      - '[0-9]+.[0-9]+.x'
   workflow_dispatch:
 # Queue jobs and only allow 1 run per branch due to the likelihood of hitting GitHub resource limits
 concurrency:
