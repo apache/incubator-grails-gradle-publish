@@ -489,7 +489,7 @@ class GrailsPublishPluginSpec extends GradleSpecification {
                     maven { url = 'https://repository.apache.org/content/groups/snapshots' }
                 }
                 dependencies {
-                    classpath "org.apache.grails:grails-gradle-plugins:\$grailsGradlePluginVersion"
+                    classpath "org.apache.grails.gradle:grails-publish:\$grailsGradlePluginVersion"
                 }
             }
             
@@ -558,7 +558,7 @@ class GrailsPublishPluginSpec extends GradleSpecification {
                     maven { url = 'https://repository.apache.org/content/groups/snapshots' }
                 }
                 dependencies {
-                    classpath "org.apache.grails:grails-gradle-plugins:\$grailsGradlePluginVersion"
+                    classpath "org.apache.grails.gradle:grails-publish:\$grailsGradlePluginVersion"
                 }
             }
             
@@ -595,7 +595,7 @@ class GrailsPublishPluginSpec extends GradleSpecification {
                     maven { url = 'https://repository.apache.org/content/groups/snapshots' }
                 }
                 dependencies {
-                    classpath "org.apache.grails:grails-gradle-plugins:\$grailsGradlePluginVersion"
+                    classpath "org.apache.grails.gradle:grails-publish:\$grailsGradlePluginVersion"
                 }
             }
             
