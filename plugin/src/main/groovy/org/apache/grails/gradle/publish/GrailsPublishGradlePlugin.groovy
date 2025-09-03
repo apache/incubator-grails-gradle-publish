@@ -196,6 +196,7 @@ Note: if project properties are used, the properties must be defined prior to ap
         boolean localSigning = false
         String signingKeyId = project.findProperty('signing.keyId') ?: System.getenv('SIGNING_KEY')
         if (isRelease) {
+            project.logger.lifecycle('Signing is enabled due to release configuration.')
             extraPropertiesExtension.set('signing.keyId', signingKeyId)
             String secringFile = project.findProperty('signing.secretKeyRingFile') ?: System.getenv('SIGNING_KEYRING')
             if (!secringFile) {
@@ -203,6 +204,7 @@ Note: if project properties are used, the properties must be defined prior to ap
                 localSigning = true
                 extraPropertiesExtension.set('signing.gnupg.keyName', signingKeyId)
             } else {
+                project.logger.lifecycle('Keyring file has been specified. Using java to sign.')
                 extraPropertiesExtension.set('signing.secretKeyRingFile', secringFile)
 
                 String signingPassphrase = project.findProperty('signing.password') ?: System.getenv('SIGNING_PASSPHRASE')
