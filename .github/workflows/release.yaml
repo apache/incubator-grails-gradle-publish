@@ -82,6 +82,7 @@ jobs:
           OWNER: ${{ github.repository_owner }}
           REPO: ${{ steps.extract_repository_name.outputs.repository_name }}
           TAG: 'v${{ steps.release_version.outputs.value }}'
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ref_json=$(gh api "repos/$OWNER/$REPO/git/ref/tags/$TAG")
           type=$(jq -r '.object.type' <<<"$ref_json")
