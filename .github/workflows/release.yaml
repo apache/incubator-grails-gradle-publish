@@ -315,6 +315,16 @@ jobs:
           curl -LO https://github.com/apache/grails-core/releases/download/$TAG/apache-grails-publish-$VERSION-incubating-src.zip.asc
           echo "Downloaded the following files:"
           ls -l
+      - name: "Upload distributions"
+        run: |
+          export TAG="v${{ needs.publish.outputs.release_version }}"
+          export VERSION="${{ needs.publish.outputs.release_version }}"
+          cd dev-repo
+          echo "Adding the following files to SVN:"
+          tree
+          svn add $VERSION --force
+          svn commit -m "Upload grails distribution files for $VERSION" --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --non-interactive
+          pwd
       - name: "💾 Store Distribution SVN revision in a file"
         run: |
           export VERSION="${{ needs.publish.outputs.release_version }}"
