@@ -422,8 +422,8 @@ Note: if project properties are used, the properties must be defined prior to ap
                         it.useGpgCmd()
                     }
 
-                    Publication[] publications = project.extensions.getByType(PublishingExtension).publications.findAll().toArray(new Publication[0])
-                    it.sign(publications)
+                    PublishingExtension publishing = project.extensions.getByType(PublishingExtension)
+                    it.sign(publishing.publications)
                 }
 
                 // The sign task does not properly setup dependencies, see https://github.com/gradle/gradle/issues/26091
