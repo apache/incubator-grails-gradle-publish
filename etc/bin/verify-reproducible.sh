@@ -30,7 +30,7 @@ cleanup() {
 }
 trap cleanup ERR
 
-cd "${DOWNLOAD_LOCATION}/grails"
+cd "${DOWNLOAD_LOCATION}/grails-publish"
 echo "Searching under ${DOWNLOAD_LOCATION}"
 
 mkdir -p "${DOWNLOAD_LOCATION}/grails-publish/etc/bin/results"
@@ -60,7 +60,7 @@ fi
 killall -e java || true
 ./gradlew publishToMavenLocal --rerun-tasks -PskipTests --no-build-cache
 echo "Generating Checksums for Built Jars"
-"${SCRIPT_DIR}/generate-build-artifact-hashes.groovy" "${DOWNLOAD_LOCATION}/grails" > "${DOWNLOAD_LOCATION}/grails-publish/etc/bin/results/second.txt"
+"${SCRIPT_DIR}/generate-build-artifact-hashes.groovy" "${DOWNLOAD_LOCATION}/grails-publish" > "${DOWNLOAD_LOCATION}/grails-publish/etc/bin/results/second.txt"
 if [ -e "${DOWNLOAD_LOCATION}/grails-publish/etc/bin/results/second.txt" ] && [ ! -s "${DOWNLOAD_LOCATION}/grails-publish/etc/bin/results/second.txt" ]; then
   echo "❌ Error: Could not find any checksums for built jar files!"
   exit 1
@@ -88,6 +88,9 @@ echo "Checking for differences in checksums"
 # diff -u CHECKSUMS second.txt
 DIFF_RESULTS=$(comm -3 <(sort ../../../CHECKSUMS) <(sort second.txt) | cut -d' ' -f1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | grep -v '^$' | uniq | sort)
 echo "$DIFF_RESULTS" > diff.txt
+
+# remove empty lines (requires gnu sed)
+sed -i '/^$/d' diff.txt
 
 if [ -s diff.txt ]; then
   echo "Differences were found, diffing jar files ..."

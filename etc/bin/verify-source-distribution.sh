@@ -31,10 +31,10 @@ fi
 VERSION=${RELEASE_TAG#v}
 
 cd "${DOWNLOAD_LOCATION}"
-ZIP_FILE=$(ls "apache-grails-gradle-publish-${VERSION}-incubating-src.zip" 2>/dev/null | head -n 1)
+ZIP_FILE=$(ls "apache-grails-publish-${VERSION}-incubating-src.zip" 2>/dev/null | head -n 1)
 
 if [ -z "${ZIP_FILE}" ]; then
-  echo "Error: Could not find apache-grails-gradle-publish-${VERSION}-incubating-src.zip in ${DOWNLOAD_LOCATION}"
+  echo "Error: Could not find apache-grails-publish-${VERSION}-incubating-src.zip in ${DOWNLOAD_LOCATION}"
   exit 1
 fi
 
@@ -45,7 +45,7 @@ cleanup() {
 trap cleanup EXIT
 
 echo "Verifying checksum..."
-shasum -a 512 -c "apache-grails-gradle-publish-${VERSION}-incubating-src.zip.sha512"
+shasum -a 512 -c "apache-grails-publish-${VERSION}-incubating-src.zip.sha512"
 echo "✅ Checksum Verified"
 
 echo "Importing GPG key to independent GPG home ..."
@@ -53,10 +53,10 @@ gpg --homedir "${GRAILS_GPG_HOME}" --import "${SCRIPT_DIR}/../../KEYS"
 echo "✅ GPG Key Imported"
 
 echo "Verifying GPG signature..."
-gpg --homedir "${GRAILS_GPG_HOME}" --verify "apache-grails-gradle-publish-${VERSION}-incubating-src.zip.asc" "apache-grails-gradle-publish-${VERSION}-incubating-src.zip"
+gpg --homedir "${GRAILS_GPG_HOME}" --verify "apache-grails-publish-${VERSION}-incubating-src.zip.asc" "apache-grails-publish-${VERSION}-incubating-src.zip"
 echo "✅ GPG Verified"
 
-SRC_DIR="grails-gradle-publish"
+SRC_DIR="grails-publish"
 
 if [ -d "${SRC_DIR}" ]; then
   echo "Previous grails directory found, purging"
@@ -69,7 +69,7 @@ if [ -d "${SRC_DIR}" ]; then
   cd "${DOWNLOAD_LOCATION}"
 fi
 echo "Extracting zip file..."
-unzip -q "apache-grails-gradle-publish-${VERSION}-incubating-src.zip"
+unzip -q "apache-grails-publish-${VERSION}-incubating-src.zip"
 
 if [ ! -d "${SRC_DIR}" ]; then
   echo "Error: Expected extracted folder '${SRC_DIR}' not found."

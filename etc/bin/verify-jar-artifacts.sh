@@ -64,7 +64,7 @@ echo "✅ GPG Key Imported"
 REPO_BASE_URL="https://repository.apache.org/content/groups/staging"
 
 # switch to the extracted Grails source directory
-cd grails
+cd grails-publish
 
 # Create a temporary directory to work in
 WORK_DIR='etc/bin/results/first'

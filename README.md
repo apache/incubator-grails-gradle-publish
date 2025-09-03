@@ -32,7 +32,11 @@ functional test resources for specific scenarios that work and do not work.
 Setup
 ---
 If obtaining the source from the source distribution and you intend to build from source, you also need to download and
-install Gradle and use it to execute one bootstrap step.
+install Gradle and use it to execute the bootstrap step so the correct version of Gradle is used. This command will bootstrap gradle: 
+
+```shell
+gradle -p gradle-bootstrap
+```
 
 Building
 ---
@@ -119,3 +123,24 @@ The credentials and connection url must be specified as a project property or an
 By default, the release or snapshot state is determined by the project.version or projectVersion gradle property. To
 override this behavior, use the environment variable `GRAILS_PUBLISH_RELEASE` with a boolean value to decide if it's a
 release or snapshot.
+
+## Release Verification
+
+To verify a reproducible build from a staged release, you can use a containerized environment such as docker to run in an environment equivalent to GitHub actions. First, ensure the gradle wrapper is downloaded by running:
+
+```shell
+gradle -p gradle-bootstrap
+```
+
+Then, run the container that matches the CI environment:
+
+```shell
+docker build -t grails:testing -f etc/bin/Dockerfile . && docker run -it --rm -v $(pwd):/home/groovy/project -p 8080:8080 grails:testing bash
+```
+
+Once in an environment with similar settings to the CI environment, you can run the following commands to verify a release:
+
+```shell
+cd grails-verify
+verify.sh v0.0.1 .
+```
